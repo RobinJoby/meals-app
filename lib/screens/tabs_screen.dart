@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:meals_app/screens/categories_screen.dart';
 import 'package:meals_app/screens/meals_screen.dart';
 
+import '../model/meal.dart';
+
 class TabsScreen extends StatefulWidget {
   const TabsScreen({super.key});
   @override
@@ -12,10 +14,7 @@ class TabsScreen extends StatefulWidget {
 
 class _TabsScreen extends State<TabsScreen> {
   int _selectedPageIndex = 0;
-  List<Widget> activeScreen = const [
-    CategoriesScreen(),
-    MealsScreen(meals: [])
-  ];
+  final List<Meal> _favouriteMeals = [];
 
   void _selectPage(int index) {
     setState(() {
@@ -23,8 +22,44 @@ class _TabsScreen extends State<TabsScreen> {
     });
   }
 
+  void _showInfoMessage(String content) {
+    ScaffoldMessenger.of(context).clearSnackBars();
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        duration: const Duration(seconds: 1),
+        content: Text(content),
+      ),
+    );
+  }
+
+  void _toggleFavouriteMeal(Meal meal) {
+    final isFavourite = _favouriteMeals.contains(meal);
+    if (isFavourite) {
+      setState(() {
+        _favouriteMeals.remove(meal);
+      });
+      _showInfoMessage('Meal removed from favourites');
+    } else {
+      setState(() {
+        _favouriteMeals.add(meal);
+      });
+      _showInfoMessage('Meal added to favourites');
+    }
+  }
+  //  List<Widget> activeScreen =  [
+  //   CategoriesScreen(),
+  //   MealsScreen(meals: [],onToggleFavouriteMeal: _ToggleFavouriteMeal,)
+  // ];
+
   @override
   Widget build(BuildContext context) {
+    Widget activeScreen = CategoriesScreen(
+      onToggleFavouriteMeal: _toggleFavouriteMeal,
+    );
+    if (_selectedPageIndex == 1) {
+      activeScreen = MealsScreen(
+          meals: _favouriteMeals, onToggleFavouriteMeal: _toggleFavouriteMeal);
+    }
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -49,7 +84,7 @@ class _TabsScreen extends State<TabsScreen> {
           ),
         ],
       ),
-      body: activeScreen[_selectedPageIndex],
+      body: activeScreen,
     );
   }
 }
