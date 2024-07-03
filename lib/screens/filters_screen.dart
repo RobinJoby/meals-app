@@ -10,7 +10,8 @@ enum Filter {
 }
 
 class FiltersScreen extends StatefulWidget {
-  const FiltersScreen({super.key});
+  const FiltersScreen({super.key, required this.currentFilters});
+  final Map<Filter, bool> currentFilters;
 
   @override
   State<FiltersScreen> createState() {
@@ -21,8 +22,20 @@ class FiltersScreen extends StatefulWidget {
 class _FiltersScreen extends State<FiltersScreen> {
   var _glutterFreeFilterSet = false;
   var _lactoseFreeFilterSet = false;
-  var _vegiterianFilterSet = false;
+  var _vegeterianFilterSet = false;
   var _veganFilterSet = false;
+
+  //widget can be accessed inside the initstate method
+
+  @override
+  void initState() {
+    super.initState();
+    _glutterFreeFilterSet = widget.currentFilters[Filter.gluttenFree]!;
+    _lactoseFreeFilterSet = widget.currentFilters[Filter.lactosFree]!;
+    _veganFilterSet = widget.currentFilters[Filter.vegan]!;
+    _vegeterianFilterSet = widget.currentFilters[Filter.vegetarian]!;
+  }
+
   @override
   Widget build(context) {
     return Scaffold(
@@ -60,7 +73,7 @@ class _FiltersScreen extends State<FiltersScreen> {
             Filter.gluttenFree: _glutterFreeFilterSet,
             Filter.lactosFree: _lactoseFreeFilterSet,
             Filter.vegetarian: _veganFilterSet,
-            Filter.vegan: _vegiterianFilterSet,
+            Filter.vegan: _vegeterianFilterSet,
           });
         },
         child: Column(
@@ -114,10 +127,10 @@ class _FiltersScreen extends State<FiltersScreen> {
               activeColor: Theme.of(context).colorScheme.tertiary,
             ),
             SwitchListTile(
-              value: _vegiterianFilterSet,
+              value: _vegeterianFilterSet,
               onChanged: (newValue) {
                 setState(() {
-                  _vegiterianFilterSet = newValue;
+                  _vegeterianFilterSet = newValue;
                 });
               },
               title: Text(

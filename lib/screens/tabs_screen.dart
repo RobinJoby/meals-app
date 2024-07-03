@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:meals_app/data/dummy_data.dart';
 import 'package:meals_app/screens/categories_screen.dart';
 import 'package:meals_app/screens/filters_screen.dart';
 import 'package:meals_app/screens/meals_screen.dart';
@@ -46,9 +47,14 @@ class _TabsScreen extends State<TabsScreen> {
     Navigator.of(context).pop();
     if (identifier == 'filters') {
       final result = await Navigator.of(context).push<Map<Filter, bool>>(
-          MaterialPageRoute(builder: (ctx) => const FiltersScreen()));
+        MaterialPageRoute(
+          builder: (ctx) => FiltersScreen(
+            currentFilters: _selectedFilters,
+          ),
+        ),
+      );
       setState(() {
-        _selectedFilters = result!;
+        _selectedFilters = result ?? kInitialFilter;
       });
     }
   }
@@ -74,8 +80,26 @@ class _TabsScreen extends State<TabsScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final availableMeals = dummyMeals.where(
+      (meal) {
+        if (_selectedFilters[Filter.gluttenFree]! && !meal.isGlutenFree) {
+          return false;
+        }
+        if (_selectedFilters[Filter.lactosFree]! && !meal.isLactoseFree) {
+          return false;
+        }
+        if (_selectedFilters[Filter.vegan]! && !meal.isVegan) {
+          return false;
+        }
+        if (_selectedFilters[Filter.vegetarian]! && !meal.isVegetarian) {
+          return false;
+        }
+        return true;
+      },
+    ).toList();
     Widget activeScreen = CategoriesScreen(
       onToggleFavouriteMeal: _toggleFavouriteMeal,
+      availableMeals: availableMeals,
     );
     if (_selectedPageIndex == 1) {
       activeScreen = MealsScreen(
