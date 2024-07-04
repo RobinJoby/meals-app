@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:meals_app/providers/favourite_meal_provider.dart';
 import 'package:meals_app/providers/meals_provider.dart';
 import 'package:meals_app/screens/categories_screen.dart';
 import 'package:meals_app/screens/filters_screen.dart';
@@ -24,23 +25,12 @@ class TabsScreen extends ConsumerStatefulWidget {
 
 class _TabsScreen extends ConsumerState<TabsScreen> {
   int _selectedPageIndex = 0;
-  final List<Meal> _favouriteMeals = [];
   Map<Filter, bool> _selectedFilters = kInitialFilter;
 
   void _selectPage(int index) {
     setState(() {
       _selectedPageIndex = index;
     });
-  }
-
-  void _showInfoMessage(String content) {
-    ScaffoldMessenger.of(context).clearSnackBars();
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        duration: const Duration(seconds: 1),
-        content: Text(content),
-      ),
-    );
   }
 
   void _setScreen(String identifier) async {
@@ -59,20 +49,6 @@ class _TabsScreen extends ConsumerState<TabsScreen> {
     }
   }
 
-  void _toggleFavouriteMeal(Meal meal) {
-    final isFavourite = _favouriteMeals.contains(meal);
-    if (isFavourite) {
-      setState(() {
-        _favouriteMeals.remove(meal);
-      });
-      _showInfoMessage('Meal removed from favourites');
-    } else {
-      setState(() {
-        _favouriteMeals.add(meal);
-      });
-      _showInfoMessage('Meal added to favourites');
-    }
-  }
   //  List<Widget> activeScreen =  [
   //   CategoriesScreen(),
   //   MealsScreen(meals: [],onToggleFavouriteMeal: _ToggleFavouriteMeal,)
@@ -99,12 +75,11 @@ class _TabsScreen extends ConsumerState<TabsScreen> {
       },
     ).toList();
     Widget activeScreen = CategoriesScreen(
-      onToggleFavouriteMeal: _toggleFavouriteMeal,
       availableMeals: availableMeals,
     );
     if (_selectedPageIndex == 1) {
-      activeScreen = MealsScreen(
-          meals: _favouriteMeals, onToggleFavouriteMeal: _toggleFavouriteMeal);
+      final favouriteMeals = ref.watch(favouriteMealProvider);
+      activeScreen = MealsScreen(meals: favouriteMeals);
     }
     return Scaffold(
       appBar: AppBar(
