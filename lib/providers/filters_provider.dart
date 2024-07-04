@@ -1,5 +1,4 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:meals_app/model/meal.dart';
 import 'package:meals_app/providers/meals_provider.dart';
 
 const kInitialFilter = {
