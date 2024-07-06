@@ -18,6 +18,8 @@ class CategoriesScreen extends StatefulWidget {
 class _CategoriesScreenState extends State<CategoriesScreen>
     with SingleTickerProviderStateMixin {
   late AnimationController _animationController;
+  late Animation _animation;
+
   void _selectCategory(BuildContext context, Category category) {
     final filteredMeals = widget.availableMeals
         .where(
@@ -89,6 +91,8 @@ class _CategoriesScreenState extends State<CategoriesScreen>
             ),
             child: child,
           );
+          // return FadeTransition(
+          //     opacity: _animationController as Animation<double>, child: child);
         });
   }
 }
