@@ -65,9 +65,12 @@ class MealDetails extends ConsumerWidget {
               width: double.infinity,
               clipBehavior: Clip.hardEdge,
               margin: const EdgeInsets.symmetric(horizontal: 15, vertical: 8),
-              child: Image.network(
-                fit: BoxFit.cover,
-                meal.imageUrl,
+              child: Hero(
+                tag: meal.id,
+                child: Image.network(
+                  fit: BoxFit.cover,
+                  meal.imageUrl,
+                ),
               ),
             ),
             const SizedBox(
