@@ -18,8 +18,6 @@ class CategoriesScreen extends StatefulWidget {
 class _CategoriesScreenState extends State<CategoriesScreen>
     with SingleTickerProviderStateMixin {
   late AnimationController _animationController;
-  late Animation _animation;
-
   void _selectCategory(BuildContext context, Category category) {
     final filteredMeals = widget.availableMeals
         .where(
