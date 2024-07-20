@@ -55,18 +55,18 @@ class MealDetails extends ConsumerWidget {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            Container(
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(
-                  12,
+            Hero(
+              tag: meal.id,
+              child: Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(
+                    12,
+                  ),
                 ),
-              ),
-              height: 300,
-              width: double.infinity,
-              clipBehavior: Clip.hardEdge,
-              margin: const EdgeInsets.symmetric(horizontal: 15, vertical: 8),
-              child: Hero(
-                tag: meal.id,
+                height: 300,
+                width: double.infinity,
+                clipBehavior: Clip.hardEdge,
+                margin: const EdgeInsets.symmetric(horizontal: 15, vertical: 8),
                 child: Image.network(
                   fit: BoxFit.cover,
                   meal.imageUrl,
